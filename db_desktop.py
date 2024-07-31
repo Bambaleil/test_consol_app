@@ -23,17 +23,18 @@ class Storage(ABC):
 class JsonStorage(Storage):
     """Класс для хранения данных в json формате"""
 
-    FILE_PATH = "library.json"
+    def __init__(self, file_path: str = "library.json"):
+        self._file_path = file_path
 
     def save(self, info: Dict | Dict[str, DictBook]) -> None:
         """Функция для сохранения данных в json формате"""
-        with open(self.FILE_PATH, 'w', encoding='utf-8') as file:
+        with open(self._file_path, 'w', encoding='utf-8') as file:
             json.dump(info, file, ensure_ascii=False, indent=4)
 
     def load(self) -> Dict | Dict[str, DictBook]:
         """Функция для загрузки данных в json формате"""
         try:
-            with open(self.FILE_PATH, 'r', encoding='utf-8') as file:
+            with open(self._file_path, 'r', encoding='utf-8') as file:
                 return json.load(file)
-        except FileNotFoundError or JSONDecodeError:
+        except (FileNotFoundError, JSONDecodeError):
             return {}
